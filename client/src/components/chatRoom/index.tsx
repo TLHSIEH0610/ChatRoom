@@ -11,6 +11,7 @@ import {
 import Landing from "./landing";
 import MessageInput from "./messageInput";
 import ChatBox from "./chatbox";
+import { Button } from "@mui/material";
 
 export default () => {
   const [connection, setConnection] = useState<HubConnection | null>(null);
@@ -41,6 +42,11 @@ export default () => {
         setMessages((prev) => [...prev, { userName, message }]);
       });
 
+      connection.onclose((e) => {
+        setConnection(null);
+        setMessages([]);
+      });
+
       //start connection
       await connection.start();
       //invoke JoinRoom method from backend
@@ -54,8 +60,15 @@ export default () => {
 
   const sendMessage = async (message: string) => {
     try {
-      if (!connection) return;
-      await connection.invoke("SendMessage", message);
+      await connection?.invoke("SendMessage", message);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const closeConnection = async () => {
+    try {
+      connection?.stop();
     } catch (e) {
       console.error(e);
     }
@@ -65,6 +78,7 @@ export default () => {
     <Container maxWidth="sm">
       {connection ? (
         <Grid container spacing={2}>
+          <Button onClick={closeConnection}>Leave Room</Button>
           <Grid xs={3}>List</Grid>
           <Grid xs={9}>
             <Box>
