@@ -27,6 +27,7 @@ namespace server.Hubs
             _connections[Context.ConnectionId] = userConnection;
             //"ReceiveMessage": the method to receive message and send to frontend(connection.on("ReceiveMessage"))
             await Clients.Group(userConnection.RoomId).SendAsync(_receiveMessageMethod, _systemUserName, $"{userConnection.UserName} has joined {userConnection.RoomId}");
+            await SendConnectedUser(userConnection.RoomId);
         }
 
 
@@ -46,10 +47,18 @@ namespace server.Hubs
                 Console.WriteLine("user disconnect");
                 _connections.Remove(Context.ConnectionId);
                 Clients.Group(userConnection.RoomId).SendAsync(_receiveMessageMethod, _systemUserName, $"{userConnection.UserName} has left");
+                SendConnectedUser(userConnection.RoomId);
 
             }
 
             return base.OnDisconnectedAsync(exception);
+        }
+
+        public Task SendConnectedUser(string roomId)
+        {
+            var users = _connections.Values.Where(c => c.RoomId == roomId).Select(c => c.UserName);
+
+            return Clients.Group(roomId).SendAsync("UserList", users);
         }
     }
 }

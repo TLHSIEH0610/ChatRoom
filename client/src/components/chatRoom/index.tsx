@@ -11,6 +11,7 @@ import {
 import Landing from "./landing";
 import MessageInput from "./messageInput";
 import ChatBox from "./chatbox";
+import UserList from "./userList";
 import { Button } from "@mui/material";
 
 export default () => {
@@ -21,7 +22,7 @@ export default () => {
       message: string;
     }[]
   >([]);
-
+  const [users, setUsers] = useState<string[]>([]);
   const joinRoom = async ({
     userName,
     roomId,
@@ -42,9 +43,14 @@ export default () => {
         setMessages((prev) => [...prev, { userName, message }]);
       });
 
-      connection.onclose((e) => {
+      connection.onclose((_) => {
         setConnection(null);
         setMessages([]);
+        setUsers([]);
+      });
+
+      connection.on("UserList", (user) => {
+        setUsers(user);
       });
 
       //start connection
@@ -79,7 +85,9 @@ export default () => {
       {connection ? (
         <Grid container spacing={2}>
           <Button onClick={closeConnection}>Leave Room</Button>
-          <Grid xs={3}>List</Grid>
+          <Grid xs={3}>
+            <UserList users={users} />
+          </Grid>
           <Grid xs={9}>
             <Box>
               <Stack>
