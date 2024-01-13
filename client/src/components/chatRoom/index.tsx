@@ -9,9 +9,17 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 import Landing from "./landing";
+import MessageInput from "./messageInput";
+import ChatBox from "./chatbox";
 
 export default () => {
   const [connection, setConnection] = useState<HubConnection | null>(null);
+  const [messages, setMessages] = useState<
+    {
+      userName: string;
+      message: string;
+    }[]
+  >([]);
 
   const joinRoom = async ({
     userName,
@@ -30,6 +38,7 @@ export default () => {
       //listening message from server
       connection.on("ReceiveMessage", (userName, message) => {
         console.log(`receive a message from ${userName}: ${message}`);
+        setMessages((prev) => [...prev, { userName, message }]);
       });
 
       //start connection
@@ -43,6 +52,15 @@ export default () => {
     }
   };
 
+  const sendMessage = async (message: string) => {
+    try {
+      if (!connection) return;
+      await connection.invoke("SendMessage", message);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <Container maxWidth="sm">
       {connection ? (
@@ -50,7 +68,10 @@ export default () => {
           <Grid xs={3}>List</Grid>
           <Grid xs={9}>
             <Box>
-              <Stack>Chat</Stack>
+              <Stack>
+                <ChatBox messages={messages} />
+                <MessageInput sendMessage={sendMessage} />
+              </Stack>
             </Box>
           </Grid>
         </Grid>

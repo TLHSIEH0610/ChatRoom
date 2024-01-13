@@ -9,6 +9,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyMethod().AllowAnyHeader().AllowCredentials().WithOrigins("http://localhost:5173");
     });
 });
+builder.Services.AddSingleton<IDictionary<string, UserConnection>>(opts => new Dictionary<string, UserConnection>());
 
 var app = builder.Build();
 
