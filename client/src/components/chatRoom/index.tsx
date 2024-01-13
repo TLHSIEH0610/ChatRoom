@@ -1,10 +1,18 @@
+import { useState } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Unstable_Grid2";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import {
+  HubConnection,
+  HubConnectionBuilder,
+  LogLevel,
+} from "@microsoft/signalr";
+import Landing from "./landing";
 
 export default () => {
+  const [connection, setConnection] = useState<HubConnection | null>(null);
+
   const joinRoom = async ({
     userName,
     roomId,
@@ -19,27 +27,36 @@ export default () => {
         .configureLogging(LogLevel.Information)
         .build();
 
-      await connection.start();
-      await connection.invoke("JoinRoom", { userName, roomId });
-
+      //listening message from server
       connection.on("ReceiveMessage", (userName, message) => {
         console.log(`receive a message from ${userName}: ${message}`);
       });
+
+      //start connection
+      await connection.start();
+      //invoke JoinRoom method from backend
+      await connection.invoke("JoinRoom", { userName, roomId });
+
+      setConnection(connection);
     } catch (e) {
       console.error(e);
     }
   };
-  joinRoom({ userName: "Hey", roomId: "ads" });
+
   return (
     <Container maxWidth="sm">
-      <Grid container spacing={2}>
-        <Grid xs={3}>List</Grid>
-        <Grid xs={9}>
-          <Box>
-            <Stack>Chat</Stack>
-          </Box>
+      {connection ? (
+        <Grid container spacing={2}>
+          <Grid xs={3}>List</Grid>
+          <Grid xs={9}>
+            <Box>
+              <Stack>Chat</Stack>
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      ) : (
+        <Landing joinRoom={joinRoom} />
+      )}
     </Container>
   );
 };

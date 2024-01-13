@@ -18,9 +18,10 @@ namespace server.Hubs
         //this method will be called whenever a user submits their name and the room they want to join
         public async Task JoinRoom(UserConnection userConnection)
         {
+            Console.WriteLine(userConnection.RoomId);
             //group by connections Id.
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.RoomId);
-            //the method to receive message will be the "ReceiveMessage" method.
+            //"ReceiveMessage": the method to receive message and send to frontend(connection.on("ReceiveMessage"))
             await Clients.Group(userConnection.RoomId).SendAsync("ReceiveMessage", _systemUserName, $"{userConnection.UserName} has joined {userConnection.RoomId}");
         }
     }
