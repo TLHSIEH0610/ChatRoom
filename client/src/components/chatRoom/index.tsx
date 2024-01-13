@@ -1,7 +1,7 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Container from "@mui/material/Container";
-import Grid from "@mui/material/Unstable_Grid2";
-import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import {
   HubConnection,
@@ -12,7 +12,8 @@ import Landing from "./landing";
 import MessageInput from "./messageInput";
 import ChatBox from "./chatbox";
 import UserList from "./userList";
-import { Button } from "@mui/material";
+import { Button, CardContent } from "@mui/material";
+import CardActions from "@mui/material/CardActions";
 
 export default () => {
   const [connection, setConnection] = useState<HubConnection | null>(null);
@@ -22,7 +23,7 @@ export default () => {
       message: string;
     }[]
   >([]);
-  const [users, setUsers] = useState<string[]>([]);
+  const [users, setUsers] = useState<string[]>(["dwdw"]);
   const joinRoom = async ({
     userName,
     roomId,
@@ -81,25 +82,33 @@ export default () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Box
+      sx={{
+        minWidth: "1280px",
+      }}
+    >
       {connection ? (
-        <Grid container spacing={2}>
-          <Button onClick={closeConnection}>Leave Room</Button>
-          <Grid xs={3}>
-            <UserList users={users} />
-          </Grid>
-          <Grid xs={9}>
-            <Box>
-              <Stack>
+        <Card>
+          <CardContent sx={{ height: "100%" }}>
+            {" "}
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <UserList users={users} />
+              </Grid>
+              <Grid item xs={9}>
                 <ChatBox messages={messages} />
-                <MessageInput sendMessage={sendMessage} />
-              </Stack>
-            </Box>
-          </Grid>
-        </Grid>
+              </Grid>
+            </Grid>
+            <MessageInput sendMessage={sendMessage} />
+          </CardContent>
+
+          <CardActions>
+            <Button onClick={closeConnection}>Leave Room</Button>{" "}
+          </CardActions>
+        </Card>
       ) : (
         <Landing joinRoom={joinRoom} />
       )}
-    </Container>
+    </Box>
   );
 };

@@ -1,6 +1,5 @@
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 
@@ -12,27 +11,27 @@ export default ({
     message: string;
   }[];
 }) => {
-  return messages.map((message, key) => (
+  return (
     <List
-      key={key}
-      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+      sx={{ width: "100%", border: "1px lightgray solid", minHeight: "600px" }}
     >
-      <ListItem alignItems="flex-start">
-        <ListItemText
-          primary={message.userName}
-          secondary={
-            <Typography
-              sx={{ display: "inline" }}
-              component="span"
-              variant="body2"
-              color="text.primary"
-            >
-              {message.message}
-            </Typography>
-          }
-        />
-      </ListItem>
-      <Divider variant="inset" component="li" />
+      {messages.map((message, key) => (
+        <ListItem alignItems="flex-start" key={key}>
+          <ListItemText
+            primary={message.userName}
+            secondary={
+              <Typography
+                sx={{ display: "inline" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                {message.message}
+              </Typography>
+            }
+          />
+        </ListItem>
+      ))}
     </List>
-  ));
+  );
 };

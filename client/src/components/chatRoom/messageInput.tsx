@@ -10,12 +10,13 @@ export default ({
 }) => {
   const [message, setMessage] = useState("");
   return (
-    <Box>
+    <Box sx={{ display: "flex", marginTop: "20px" }}>
       <TextField
         id="message"
         label="Message"
         variant="outlined"
         value={message}
+        fullWidth
         onChange={({ target: { value } }) => setMessage(value)}
       />
       <Button
