@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Container from "@mui/material/Container";
+import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
@@ -14,6 +13,7 @@ import ChatBox from "./chatbox";
 import UserList from "./userList";
 import { Button, CardContent } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
+const chatURL = import.meta.env.VITE_CHAT_URL;
 
 export default () => {
   const [connection, setConnection] = useState<HubConnection | null>(null);
@@ -34,7 +34,7 @@ export default () => {
     try {
       // create a connection
       const connection = new HubConnectionBuilder()
-        .withUrl("http://localhost:5190/chatroom")
+        .withUrl(chatURL)
         .configureLogging(LogLevel.Information)
         .build();
 
