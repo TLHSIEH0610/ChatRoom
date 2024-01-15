@@ -1,5 +1,5 @@
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default ({
 }) => {
   const [message, setMessage] = useState("");
   return (
-    <Box sx={{ display: "flex", marginTop: "20px" }}>
+    <Stack spacing={2} direction="row">
       <TextField
         id="message"
         label="Message"
@@ -25,9 +25,11 @@ export default ({
           sendMessage(message);
           setMessage("");
         }}
+        variant="contained"
+        size="small"
       >
         Send
       </Button>
-    </Box>
+    </Stack>
   );
 };

@@ -84,7 +84,7 @@ export default () => {
   return (
     <Box
       sx={{
-        minWidth: "1280px",
+        width: "1280px",
       }}
     >
       {connection ? (
@@ -99,6 +99,7 @@ export default () => {
                 <ChatBox messages={messages} />
               </Grid>
             </Grid>
+            <br />
             <MessageInput sendMessage={sendMessage} />
           </CardContent>
 

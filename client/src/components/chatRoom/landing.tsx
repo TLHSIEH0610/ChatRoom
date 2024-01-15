@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import { useState } from "react";
 
 interface IFormContent {
@@ -25,8 +25,15 @@ export default ({
   };
 
   return (
-    <Box>
+    <Stack
+      sx={{
+        margin: "auto",
+        width: "400px",
+      }}
+      spacing={2}
+    >
       <TextField
+        fullWidth
         id="userName"
         label="UserName"
         variant="outlined"
@@ -35,6 +42,7 @@ export default ({
         }
       />
       <TextField
+        fullWidth
         id="roomId"
         label="RoomId"
         variant="outlined"
@@ -42,9 +50,9 @@ export default ({
           setFormContent((prev) => ({ ...prev, roomId: value }))
         }
       />
-      <Button disabled={disabled} onClick={onSubmit}>
+      <Button variant="contained" disabled={disabled} onClick={onSubmit}>
         Join
       </Button>
-    </Box>
+    </Stack>
   );
 };

@@ -18,15 +18,15 @@ export default ({
       {messages.map((message, key) => (
         <ListItem alignItems="flex-start" key={key}>
           <ListItemText
-            primary={message.userName}
+            primary={message.message}
             secondary={
               <Typography
                 sx={{ display: "inline" }}
                 component="span"
                 variant="body2"
-                color="text.primary"
+                color="text.secondary"
               >
-                {message.message}
+                {message.userName}
               </Typography>
             }
           />
